@@ -11,7 +11,7 @@ int main(int argc, char** argv){
         server_side::ClientHandler *handler = new server_side::MyTestClientHandler(solver);
         server->open(8000, handler);
 
-        std::string s;
+        std::string s;  
         std::cout << "Server is running on port 8000, press 's' then enter to stop\n";
         std::cin >> s;
         server->stop();
