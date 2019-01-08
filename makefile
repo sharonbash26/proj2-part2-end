@@ -9,7 +9,7 @@ run_client:
 
 
 server:
-	g++ -std=c++14 -pthread serv/*.cpp serv/alg/*.cpp -o serv.out
+	g++ -pthread serv/*.cpp serv/alg/*.cpp -o serv.out
 
 client:
-	g++ -std=c++14 client/client_main.cpp -o client.out
+	g++ client/client_main.cpp -o client.out

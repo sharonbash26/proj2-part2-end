@@ -26,11 +26,11 @@ int main(int argc, char *argv[]) {
 
     portno = atoi(argv[2]);
 
-    /* Create a socket point */
+    /* Create a net point */
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0) {
-        perror("ERROR opening socket");
+        perror("ERROR opening net");
         exit(1);
     }
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
         n = write(sockfd, buffer, strlen(buffer));
 
         if (n < 0) {
-            perror("ERROR writing to socket");
+            perror("ERROR writing to net");
             exit(1);
         }
 
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
         n = read(sockfd, buffer, 255);
 
         if (n < 0) {
-            perror("ERROR reading from socket");
+            perror("ERROR reading from net");
             exit(1);
         }
 
