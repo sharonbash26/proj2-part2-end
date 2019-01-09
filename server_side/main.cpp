@@ -5,6 +5,7 @@
 #include "MySerialServer.h"
 #include "client_handlers/MyTestClientHandler.h"
 #include "../lib/algo/solvers/StringReverser.h"
+#include "MyParallelServer.h"
 
 
 // for closing when receiving sigint
@@ -27,7 +28,7 @@ int main(int argc, char **argv) {
     sigaction(SIGTERM, &act, nullptr);
     sigaction(SIGKILL, &act, nullptr);
     try {
-        server_side::Server *server = new server_side::MySerialServer();
+        server_side::Server *server = new server_side::MyParallelServer();
         globalServer = server;
         Solver<std::string, std::string> *solver = new StringReverser();
         server_side::ClientHandler *handler = new server_side::MyTestClientHandler(solver);

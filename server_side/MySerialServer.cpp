@@ -6,13 +6,13 @@
 #include <cstring>
 #include <sstream>
 
-struct thread_params {
+struct accept_thread_params {
     net::Connection *conn;
     server_side::ClientHandler *ch;
 };
 
-void *thread_func(void *arg) {
-    struct thread_params *params = (struct thread_params *) arg;
+static void *accept_loop(void *arg) {
+    struct accept_thread_params *params = (struct accept_thread_params *) arg;
 
     // open the connection - and obtain an acceptor
     net::Acceptor acceptor = params->conn->open();
@@ -20,7 +20,7 @@ void *thread_func(void *arg) {
     while (true) {
         try {
             // accept a connection
-            net::Socket clientSocket = acceptor.accept(20);
+            net::Socket *clientSocket = acceptor.accept(20);
 
             //handle the client
             params->ch->handleClient(clientSocket);
@@ -49,13 +49,13 @@ void server_side::MySerialServer::open(uint16_t port, server_side::ClientHandler
     // leave the listen and accept things to the thread.
     // therefore we need the sockfd in the thread. save it in the args.
 
-    struct thread_params *args = new thread_params();
+    struct accept_thread_params *args = new accept_thread_params();
     // init the thread arguments (thread params)
     args->ch = ch;
     args->conn = c;
     // done initializing the thread arguments - create and start the thread.
 
-    if (pthread_create(&tid, NULL, thread_func, args)) {
+    if (pthread_create(&tid, NULL, accept_loop, args)) {
         throw std::string("Error creating server thread");
     }
 }

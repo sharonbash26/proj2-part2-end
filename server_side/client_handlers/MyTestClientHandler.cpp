@@ -10,12 +10,12 @@ server_side::MyTestClientHandler::MyTestClientHandler(Solver<std::string, std::s
 }
 
 
-void server_side::MyTestClientHandler::handleClient(net::Socket &s) {
+void server_side::MyTestClientHandler::handleClient(net::Socket *s) {
     std::string line;
     while (true) {
         //Receive a message from client, and handle it
         printf("[ClientHandler]: Reading a line...\n");
-        line = s.readLine();
+        line = s->readLine();
         printf("[ClientHandler]: done reading a line: '%s'\n", line.c_str());
 
         // if we should end the connection
@@ -30,14 +30,15 @@ void server_side::MyTestClientHandler::handleClient(net::Socket &s) {
         printf("[ClientHandler]: handling client request: %s\n", line.c_str());
         if (_cacheManager->containsSolution(line)) {
             printf("[ClientHandler]: Found solution in cache.\n");
-            s.send(_cacheManager->loadSolution(line));
-            return;
+            s->send(_cacheManager->loadSolution(line));
+            continue;
         }
 
         printf("[ClientHandler]: Solving the problem.\n");
         std::string solution = _solver->solve(line);
         _cacheManager->saveSolution(line, solution);
-        s.send(solution);
+        s->send(solution);
     }
+    delete s;
 }
 

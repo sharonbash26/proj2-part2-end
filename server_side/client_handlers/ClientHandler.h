@@ -11,7 +11,7 @@
 namespace server_side {
     class ClientHandler {
     public:
-        virtual void handleClient(net::Socket &s) = 0;
+        virtual void handleClient(net::Socket *s) = 0;
     };
 }
 

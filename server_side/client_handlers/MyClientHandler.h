@@ -15,7 +15,7 @@ namespace server_side {
     public:
         explicit MyClientHandler(Solver<Maze, std::string> *solver);
 
-        void handleClient(net::Socket &s) override;
+        void handleClient(net::Socket *s) override;
 
     private:
         Solver<Maze, std::string> *solver;

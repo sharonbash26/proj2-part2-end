@@ -13,7 +13,7 @@ namespace net {
     public:
         explicit Acceptor(int sockfd);
 
-        Socket accept(int timeout = 0);
+        Socket* accept(int timeout = 0);
 
     private:
         int sockfd;

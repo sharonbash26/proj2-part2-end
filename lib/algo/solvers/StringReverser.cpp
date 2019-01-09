@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "StringReverser.h"
 
-std::string StringReverser::solve(std::string p) {
+std::string StringReverser::solve(const std::string &p) {
     std::string cpy(p);
     std::reverse(cpy.begin(), cpy.end());
     return cpy;

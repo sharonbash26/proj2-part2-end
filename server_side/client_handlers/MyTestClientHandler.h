@@ -11,7 +11,7 @@ namespace server_side {
     public:
         explicit MyTestClientHandler(Solver<std::string, std::string> *solver);
 
-        void handleClient(net::Socket &s) override;
+        void handleClient(net::Socket *s) override;
 
     private:
         Solver<std::string, std::string> *_solver;

@@ -50,6 +50,7 @@ net::Acceptor net::Connection::open() {
 }
 
 void net::Connection::close() {
+    //printf("[Connection]: closing connection...\n");
     if (shutdown(sockfd, 2)) {
         throw std::string("Failed to close the server net");
     }

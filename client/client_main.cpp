@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 
         /* Send message to the server */
         n = write(sockfd, buffer, strlen(buffer));
-
+        printf("wrote the message!\n");
         if (n < 0) {
             perror("ERROR writing to net");
             exit(1);

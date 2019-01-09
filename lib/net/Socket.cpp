@@ -13,6 +13,7 @@ net::Socket::Socket(int fd) {
 }
 
 net::Socket::~Socket() {
+    printf("Socket fd %d destructing...\n", _fd);
     if (close(_fd)) {
         throw std::string("Error while closing the socket");
     }

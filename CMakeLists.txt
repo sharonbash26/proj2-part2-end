@@ -20,7 +20,7 @@ set(UTIL lib/util/Util.h lib/util/Util.cpp)
 set(SERVER_FILES server_side/Server.h server_side/MySerialServer.cpp server_side/MySerialServer.h
         server_side/client_handlers/ClientHandler.h server_side/client_handlers/MyTestClientHandler.cpp server_side/client_handlers/MyTestClientHandler.h
 
-        server_side/client_handlers/MyClientHandler.cpp server_side/client_handlers/MyClientHandler.h)
+        server_side/client_handlers/MyClientHandler.cpp server_side/client_handlers/MyClientHandler.h server_side/MyParallelServer.cpp server_side/MyParallelServer.h)
 
 set(SOURCE_FILES server_side/main.cpp ${SERVER_FILES} ${NET} ${ALGO} ${UTIL})
 add_executable(proj2 ${SOURCE_FILES})

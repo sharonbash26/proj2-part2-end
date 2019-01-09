@@ -11,7 +11,7 @@ net::Acceptor::Acceptor(int sockfd) {
     this->sockfd = sockfd;
 }
 
-net::Socket net::Acceptor::accept(int timeout) {
+net::Socket* net::Acceptor::accept(int timeout) {
     if (timeout > 0) {
         // no timeout
         fd_set set;
@@ -24,7 +24,7 @@ net::Socket net::Acceptor::accept(int timeout) {
         t.tv_usec = 0; // this is 0 because all the internet examples showed that.
 
 
-        printf("[Server]: Waiting for %d seconds for the next client\n", (int) t.tv_sec);
+        // printf("[Acceptor]: Waiting for %d seconds for the next client\n", (int) t.tv_sec);
         rv = select(sockfd + 1, &set, NULL, NULL, &t);
         if (rv == -1) {
             perror("select");
@@ -35,7 +35,7 @@ net::Socket net::Acceptor::accept(int timeout) {
     } // if timeout was set.
 
 
-    printf("[Acceptor] accepting a client...\n");
+    // printf("[Acceptor] accepting a client...\n");
     int clientfd;
     socklen_t addr_len;
     struct sockaddr_in cli_addr;
@@ -46,6 +46,6 @@ net::Socket net::Acceptor::accept(int timeout) {
         perror("accept");
         throw std::string("Error while accepting a connection");
     }
-    printf("[Acceptor]: Successfully accepter the client, fd: %d\n", clientfd);
-    return Socket(clientfd);
+    // printf("[Acceptor]: Successfully accepter the client, fd: %d\n", clientfd);
+    return new Socket(clientfd);
 }

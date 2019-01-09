@@ -12,7 +12,7 @@ server_side::MyClientHandler::MyClientHandler(Solver<Maze, std::string> *solver)
     cacheManager = new MapCacheManager<size_t, std::string>();
 }
 
-void server_side::MyClientHandler::handleClient(net::Socket &s) {
+void server_side::MyClientHandler::handleClient(net::Socket *s) {
     std::string all_client_input;
     std::string line;
     std::vector<std::string> matrix;
@@ -22,7 +22,7 @@ void server_side::MyClientHandler::handleClient(net::Socket &s) {
     while (true) {
         //Receive a message from client, and handle it
         //printf("[ClientHandler]: Reading a line...\n");
-        line = s.readLine();
+        line = s->readLine();
         // if we should end the connection
         if (line == "end") {
             break;
@@ -33,8 +33,8 @@ void server_side::MyClientHandler::handleClient(net::Socket &s) {
     }
 
     // now input the begin point and end point
-    std::string begin = s.readLine();
-    std::string end = s.readLine();
+    std::string begin = s->readLine();
+    std::string end = s->readLine();
 
     all_client_input += begin;
     all_client_input += '\n';
@@ -42,18 +42,17 @@ void server_side::MyClientHandler::handleClient(net::Socket &s) {
 
     problemHash = hasher(all_client_input);
     all_client_input.clear();
-    // now we got our problem hash.
-    printf("[ClientHandler]: Checking for the problem in the cache...\n");
+    // now we got our problem hash.;
     if (cacheManager->containsSolution(problemHash)) {
-        printf("[ClientHandler]: Found solution, sending to client...\n");
-        s.send(cacheManager->loadSolution(problemHash));
-        return;
+        s->send(cacheManager->loadSolution(problemHash));
+    } else {
+        // otherwise - we need to solve the problem.
+        // first of all - util the input into the matrix object.
+        Maze m = MazeParser::parseMaze(matrix, begin, end);
+        std::string sol = solver->solve(m);
+        cacheManager->saveSolution(problemHash, sol);
+        s->send(sol); // send the solution back to the client.
     }
 
-    // otherwise - we need to solve the problem.
-    // first of all - util the input into the matrix object.
-    Maze m = MazeParser::parseMaze(matrix, begin, end);
-    std::string sol = solver->solve(m);
-    cacheManager->saveSolution(problemHash, sol);
-    s.send(sol); // send the solution back to the client.
+    delete s; // delete the socket
 }
