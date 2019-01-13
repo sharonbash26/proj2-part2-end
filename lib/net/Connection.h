@@ -18,7 +18,6 @@ namespace net {
         ~Connection();
 
         Acceptor open();
-     
 
         void close();
 

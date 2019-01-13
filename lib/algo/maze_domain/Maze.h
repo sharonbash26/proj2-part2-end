@@ -12,6 +12,7 @@
 
 class Maze {
 public:
+
     Maze(size_t nrows, size_t ncols, Cell entry, Cell dest);
 
     virtual ~Maze();

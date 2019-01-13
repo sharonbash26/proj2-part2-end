@@ -35,7 +35,7 @@ void server_side::MyTestClientHandler::handleClient(net::Socket *s) {
         }
 
         printf("[ClientHandler]: Solving the problem.\n");
-        std::string solution = _solver->solve(line);
+        std::string solution = _solver->solve(&line);
         _cacheManager->saveSolution(line, solution);
         s->send(solution);
     }

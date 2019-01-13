@@ -3,9 +3,12 @@
 
 #include <iostream>
 #include "MySerialServer.h"
-#include "client_handlers/MyTestClientHandler.h"
-#include "../lib/algo/solvers/StringReverser.h"
 #include "MyParallelServer.h"
+#include "../lib/algo/search/Searchable.h"
+#include "../lib/algo/search/Solution.h"
+#include "../lib/algo/search/AStar.h"
+#include "../lib/algo/search/SearcherAdapter.h"
+#include "client_handlers/MyClientHandler.h"
 
 
 // for closing when receiving sigint
@@ -30,14 +33,19 @@ int main(int argc, char **argv) {
     try {
         server_side::Server *server = new server_side::MyParallelServer();
         globalServer = server;
-        Solver<std::string, std::string> *solver = new StringReverser();
-        server_side::ClientHandler *handler = new server_side::MyTestClientHandler(solver);
+        Searcher *searcher = new AStar();
+        SearcherAdapter *adapter = new SearcherAdapter(searcher);
+        server_side::ClientHandler *handler = new server_side::MyClientHandler(adapter);
         server->open(8000, handler);
 
         std::string s;
         std::cout << "Server is running on port 8000, press 's' then enter to stop\n";
         std::cin >> s;
         server->stop();
+
+        delete handler;
+        delete adapter;
+        delete searcher;
         delete server;
         std::cout << "Server stopped.\n";
     } catch (const std::string &err) {

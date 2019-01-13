@@ -10,7 +10,7 @@
 #include "../Solver.h"
 
 class StringReverser : public Solver<std::string, std::string> {
-    std::string solve(const std::string &p) override;
+    std::string solve(std::string *p) override;
 };
 
 
