@@ -5,9 +5,9 @@
 #include <vector>
 #include "MyClientHandler.h"
 #include "../../lib/algo/MapCacheManager.h"
-#include "../../lib/algo/maze_domain/MazeParser.h"
+#include "../../lib/algo/search/ProblemParser.h"
 
-server_side::MyClientHandler::MyClientHandler(Solver<Maze, std::string> *solver) {
+server_side::MyClientHandler::MyClientHandler(SearcherAdapter *solver) {
     this->solver = solver;
     cacheManager = new MapCacheManager<size_t, std::string>();
 }
@@ -48,10 +48,12 @@ void server_side::MyClientHandler::handleClient(net::Socket *s) {
     } else {
         // otherwise - we need to solve the problem.
         // first of all - util the input into the matrix object.
-        Maze m = MazeParser::parseMaze(matrix, begin, end);
-        std::string sol = solver->solve(m);
-        cacheManager->saveSolution(problemHash, sol);
-        s->send(sol); // send the solution back to the client.
+        Searchable* maze = ProblemParser::parseProblem(matrix, begin, end);
+        //Maze m = MazeParser::parseMaze(matrix, begin, end);
+        Solution sol = solver->solve(maze);
+        std::string solstr = sol.toString();
+        cacheManager->saveSolution(problemHash, solstr);
+        s->send(solstr); // send the solution back to the client.
     }
 
     delete s; // delete the socket

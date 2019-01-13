@@ -18,9 +18,7 @@ namespace net {
         ~Connection();
 
         Acceptor open();
-        // u can call me, meanwhile im refactoring and implementing the matrix thing.
-        // its simple to simulate the algo, and that is what i will probably do - supply a
-        // fake solver which returns some random solution.
+
 
         void close();
 

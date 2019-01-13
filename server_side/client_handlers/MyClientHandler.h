@@ -8,17 +8,18 @@
 #include "ClientHandler.h"
 #include "../../lib/algo/Solver.h"
 #include "../../lib/algo/CacheManager.h"
-#include "../../lib/algo/maze_domain/Maze.h"
+#include "../../lib/algo/search/Problem.h"
+#include "../../lib/algo/search/SearcherAdapter.h"
 
 namespace server_side {
     class MyClientHandler : public server_side::ClientHandler {
     public:
-        explicit MyClientHandler(Solver<Maze, std::string> *solver);
+        explicit MyClientHandler(SearcherAdapter *solver);
 
         void handleClient(net::Socket *s) override;
 
     private:
-        Solver<Maze, std::string> *solver;
+        SearcherAdapter *solver;
         CacheManager<size_t, std::string> *cacheManager;
 
         std::hash<std::string> hasher;

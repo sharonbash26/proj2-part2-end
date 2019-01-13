@@ -7,8 +7,7 @@
 
 #include <map>
 #include "CacheManager.h"
-// hello
-// call me
+
 
 template<class Problem, class Solution>
 class MapCacheManager : public CacheManager<Problem, Solution> {
