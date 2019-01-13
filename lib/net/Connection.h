@@ -19,7 +19,6 @@ namespace net {
 
         Acceptor open();
 
-
         void close();
 
     private:
