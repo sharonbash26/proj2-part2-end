@@ -18,10 +18,12 @@ void server_side::MyClientHandler::handleClient(net::Socket *s) {
     std::vector<std::string> matrix;
     size_t problemHash;
 
+
+    printf("[ClientHandler]: reading matrix...\n");
     // read the matrix
     while (true) {
         //Receive a message from client, and handle it
-        //printf("[ClientHandler]: Reading a line...\n");
+        printf("[ClientHandler]: Reading a line...\n");
         line = s->readLine();
         // if we should end the connection
         if (line == "end") {
@@ -31,7 +33,7 @@ void server_side::MyClientHandler::handleClient(net::Socket *s) {
         all_client_input += line;
         all_client_input += '\n';
     }
-
+    printf("[ClientHandler]: done reading matrix. reading entry and end spot...\n");
     // now input the begin point and end point
     std::string begin = s->readLine();
     std::string end = s->readLine();

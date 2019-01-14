@@ -12,12 +12,14 @@
 
 #include <string.h>
 
+#define BUFSIZE 1024
+
 int main(int argc, char *argv[]) {
     int sockfd, portno, n;
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
-    char buffer[256];
+    char buffer[BUFSIZE];
 
     if (argc < 3) {
         fprintf(stderr,"usage %s hostname port\n", argv[0]);
@@ -52,13 +54,15 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+    int numOfInputsAfterEnd = 0;
+
     /* Now ask for a message from the user, this message
        * will be read by server
     */
-    while(true) {
+    while(numOfInputsAfterEnd <= 2) {
         printf("Please enter the message: ");
-        bzero(buffer, 256);
-        fgets(buffer, 255, stdin);
+        bzero(buffer, BUFSIZE);
+        fgets(buffer, BUFSIZE-1, stdin);
 
         /* Send message to the server */
         n = write(sockfd, buffer, strlen(buffer));
@@ -68,21 +72,26 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
 
+        if(numOfInputsAfterEnd){
+            ++numOfInputsAfterEnd;
+        }
         if(!strcmp("end", buffer) || !strcmp("end\n", buffer)){
-            break;
+            numOfInputsAfterEnd++;
         }
-
-        /* Now read server response */
-        bzero(buffer, 256);
-        n = read(sockfd, buffer, 255);
-
-        if (n < 0) {
-            perror("ERROR reading from net");
-            exit(1);
-        }
-
         printf("%s\n", buffer);
     }
+
+    /* Now read server response */
+    bzero(buffer, BUFSIZE);
+    n = read(sockfd, buffer, BUFSIZE-1);
+
+    if (n < 0) {
+        perror("ERROR reading from net");
+        exit(1);
+    }
+
+    printf("'%s'\n", buffer);
+
     close(sockfd);
     return 0;
 }
